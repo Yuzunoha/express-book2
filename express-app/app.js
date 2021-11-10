@@ -3,16 +3,19 @@ var fs = require('fs');
 
 const p = console.log;
 
+const index = fs.readFileSync('./index.html', 'utf-8');
+const next = fs.readFileSync('./next.html', 'utf-8');
+
 var server = http.createServer((req, res) => {
-  var target = '';
+  var html = '';
 
   switch (req.url) {
     case '/':
     case '/index':
-      target = './index.html';
+      html = index;
       break;
     case '/next':
-      target = './next.html';
+      html = next;
       break;
     default:
       res.writeHead(404, { 'Content-Type': 'text/html' });
@@ -20,11 +23,9 @@ var server = http.createServer((req, res) => {
       return;
   }
 
-  fs.readFile(target, 'utf-8', (err, data) => {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.write(data);
-    res.end();
-  });
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.write(html);
+  res.end();
 });
 
 server.listen(80);
