@@ -8,3 +8,5 @@ services:
       - ./express-app:/root/express-app
     ports:
       - 80:80
+    environment:
+      TZ: Asia/Tokyo
