@@ -1,30 +1,33 @@
 var http = require('http');
 var fs = require('fs');
+var url = require('url');
+var qs = require('querystring');
 
 const p = console.log;
-
 const index = fs.readFileSync('./index.html', 'utf-8');
-const next = fs.readFileSync('./next.html', 'utf-8');
 
 var server = http.createServer((req, res) => {
-  var html = '';
+  if ('GET' === req.method) {
+    var urlParts = url.parse(req.url, true);
+    p('---GET Request---');
+    p(`name: ${urlParts.query.name}`);
+    p(`age : ${urlParts.query.age}`);
+  } else {
+    var body = '';
 
-  switch (req.url) {
-    case '/':
-    case '/index':
-      html = index;
-      break;
-    case '/next':
-      html = next;
-      break;
-    default:
-      res.writeHead(404, { 'Content-Type': 'text/html' });
-      res.end('bad request');
-      return;
+    req.on('data', (data) => {
+      body += data;
+    });
+    req.on('end', () => {
+      var params = qs.parse(body);
+      p('---POST Request---');
+      p(`name: ${params.name}`);
+      p(`age : ${params.age}`);
+    });
   }
 
   res.writeHead(200, { 'Content-Type': 'text/html' });
-  res.write(html);
+  res.write(index);
   res.end();
 });
 
