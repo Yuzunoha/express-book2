@@ -6,12 +6,17 @@ var qs = require('querystring');
 const p = console.log;
 const index = fs.readFileSync('./index.html', 'utf-8');
 
+const disp = (method, obj) => {
+  const { name, age } = obj;
+  p(`---${method} Request---`);
+  p(`name: ${name}`);
+  p(`age : ${age}`);
+};
+
 var server = http.createServer((req, res) => {
   if ('GET' === req.method) {
     var urlParts = url.parse(req.url, true);
-    p('---GET Request---');
-    p(`name: ${urlParts.query.name}`);
-    p(`age : ${urlParts.query.age}`);
+    disp('GET', urlParts.query);
   } else {
     var body = '';
 
@@ -20,9 +25,7 @@ var server = http.createServer((req, res) => {
     });
     req.on('end', () => {
       var params = qs.parse(body);
-      p('---POST Request---');
-      p(`name: ${params.name}`);
-      p(`age : ${params.age}`);
+      disp('POST', params);
     });
   }
 
