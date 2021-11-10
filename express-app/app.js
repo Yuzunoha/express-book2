@@ -1,37 +1,21 @@
 var http = require('http');
-var fs = require('fs');
 var url = require('url');
-var qs = require('querystring');
+var fs = require('fs');
 
 const p = console.log;
-const index = fs.readFileSync('./index.html', 'utf-8');
-
-const disp = (method, obj) => {
-  const { name, age } = obj;
-  p(`---${method} Request---`);
-  p(`name: ${name}`);
-  p(`age : ${age}`);
-};
 
 var server = http.createServer((req, res) => {
-  if ('GET' === req.method) {
-    var urlParts = url.parse(req.url, true);
-    disp('GET', urlParts.query);
-  } else {
-    var body = '';
+  var urlParts = url.parse(req.url);
+  var path = __dirname + '/' + urlParts.pathname;
+  p('path', path);
+  var stream = fs.createReadStream(path);
 
-    req.on('data', (data) => {
-      body += data;
-    });
-    req.on('end', () => {
-      var params = qs.parse(body);
-      disp('POST', params);
-    });
-  }
-
-  res.writeHead(200, { 'Content-Type': 'text/html' });
-  res.write(index);
-  res.end();
+  stream.on('data', (data) => {
+    res.write(data);
+  });
+  stream.on('end', (data) => {
+    res.end();
+  });
 });
 
 server.listen(80);
