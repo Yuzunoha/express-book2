@@ -7,9 +7,9 @@ const p = console.log;
 app.engine('ejs', ejs.renderFile);
 
 app.get('/', (req, res) => {
-  const contents = '<p>hoge</p>';
   res.render('temp.ejs', {
-    contents,
+    title: 'タイトルだよー',
+    contents: '<p>hoge</p>',
   });
 });
 
