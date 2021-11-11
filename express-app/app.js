@@ -1,14 +1,21 @@
 var http = require('http');
-var func = require('./func');
+var fs = require('fs');
+var ejs = require('ejs');
 
-const { add, sub } = func;
 const p = console.log;
-
-p(add(1, 21));
-p(sub(10, 30));
+var temp = fs.readFileSync('./temp.ejs', 'utf-8');
 
 var server = http.createServer((req, res) => {
-  res.end('サーバです');
+  var data = ejs.render(temp, {
+    title: 'EJSのテスト',
+    contents1: '<p>ここはエスケープされない</p>',
+    contents2: '<p>ここはエスケープされる</p>',
+    arr: ['いちご', 'メロン', 'バナナ'],
+  });
+
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.write(data);
+  res.end();
 });
 
 server.listen(80);
