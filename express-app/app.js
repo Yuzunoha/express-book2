@@ -1,18 +1,18 @@
 var express = require('express');
 var ejs = require('ejs');
-var cookieParser = require('cookie-parser');
-
 var app = express();
 const p = console.log;
-
-app.engine('ejs', ejs.renderFile);
-app.use(cookieParser());
+var msg = '';
 
 app.get('/', (req, res) => {
-  var cnt = req.cookies.cnt ? req.cookies.cnt : 0;
-  cnt++;
-  res.cookie('cnt', cnt, { maxAge: 5000 });
-  res.render('temp.ejs', { cnt });
+  res.render('temp.ejs', {});
+});
+
+app.post('/ajax', (req, res) => {
+  msg += 'hoge';
+  res.json({
+    msg,
+  });
 });
 
 app.listen(80, () => {
