@@ -10,7 +10,9 @@ var server = http.createServer((req, res) => {
   const contents = ejs.render(sub, {
     data: '<p>hogehoge</p>',
   });
-  var data = ejs.render(main, { contents });
+  var data = ejs.render(main, {
+    data: contents,
+  });
 
   res.writeHead(200, { 'Content-Type': 'text/html' });
   res.write(data);
