@@ -2,9 +2,14 @@
 <html>
   <head>
     <metacharset="utf-8">
-    <title><%= title %></title>
+    <title>Express & EJS</title>
   </head>
   <body>
-    <%- contents %>
+    <a href="/?name=hoge&age=20">GET</a>
+    <form action="/" method="POST">
+      <button type="submit">POST</button>
+      <input type="text" name="name", value="fuga">
+      <input type="text" name="age", value="30">
+    </form>
   </body>
 </html>
