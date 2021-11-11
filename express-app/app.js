@@ -1,27 +1,18 @@
 var express = require('express');
 var ejs = require('ejs');
-var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 
 var app = express();
 const p = console.log;
 
 app.engine('ejs', ejs.renderFile);
-app.use(bodyParser.urlencoded({ extended: true }));
-
-const disp = (msg, { name, age }) => {
-  p(msg);
-  p(name);
-  p(age);
-};
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
-  disp('GET', req.query);
-  res.render('temp.ejs', {});
-});
-
-app.post('/', (req, res) => {
-  disp('POST', req.body);
-  res.render('temp.ejs', {});
+  var cnt = req.cookies.cnt ? req.cookies.cnt : 0;
+  cnt++;
+  res.cookie('cnt', cnt, { maxAge: 5000 });
+  res.render('temp.ejs', { cnt });
 });
 
 app.listen(80, () => {
