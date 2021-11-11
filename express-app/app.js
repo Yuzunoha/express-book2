@@ -1,15 +1,14 @@
 var http = require('http');
-var url = require('url');
-var fs = require('fs');
+var func = require('./func');
 
+const { add, sub } = func;
 const p = console.log;
 
-var server = http.createServer((req, res) => {
-  var urlParts = url.parse(req.url);
-  var path = __dirname + '/' + urlParts.pathname;
-  var stream = fs.createReadStream(path);
+p(add(1, 21));
+p(sub(10, 30));
 
-  stream.pipe(res);
+var server = http.createServer((req, res) => {
+  res.end('サーバです');
 });
 
 server.listen(80);
